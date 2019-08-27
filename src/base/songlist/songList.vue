@@ -25,6 +25,7 @@ export default {
             return `${song.singer} / ${song.album}`;
         },
         selectItem(item,index) {
+            // 選歌
             this.$emit('select', item, index);
         }
     }
