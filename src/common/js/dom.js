@@ -27,3 +27,34 @@ export function getDataSet (el,name,val) {
     }
 
 }
+
+var elementStyle = document.createElement('div').style;
+
+var vendor = (() => {
+    var transformNames = {
+        webkit: 'webkitTransform',
+        Moz: 'MozTransform',
+        O: 'Otransform',
+        ms: 'msTransform',
+        standard: 'transform'
+    }
+
+    for (let key in transformNames) {
+        if (elementStyle[key] !== undefined) {
+        return key;
+        }
+    }
+
+    return false;
+
+})()
+
+export function prefixStyle (style) {
+    if (vendor === false) return false;
+
+    if (vendor === 'standard') {
+        return style;
+    }
+
+    return vendor + style.charAt(0).toUpperCase() + style.substr(1);
+}
