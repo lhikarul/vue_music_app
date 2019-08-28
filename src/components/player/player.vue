@@ -1,66 +1,71 @@
 <template>
     <div class="player" v-show="playList.length > 0">
-        <div class="normal-player" v-show="fullScreen">
-            <div class="background">
-                <img width="100%" height="100%" :src="currentSong.image">
-            </div>
 
-            <div class="top">
-                <div class="back" @click="back">
-                    <i class="icon-back"></i>
+        <transition name="normal">
+            <div class="normal-player" v-show="fullScreen">
+                <div class="background">
+                    <img width="100%" height="100%" :src="currentSong.image">
                 </div>
-                <h1 class="title">{{currentSong.name}}</h1>
-                <h2 class="subtitle">{{currentSong.singer}}</h2>
-            </div>
 
-            <div class="middle">
-                <div class="middle-l">
-                    <div class="cd-wrapper">
-                        <div class="cd">
-                            <img class="image" :src="currentSong.image">
+                <div class="top">
+                    <div class="back" @click="back">
+                        <i class="icon-back"></i>
+                    </div>
+                    <h1 class="title">{{currentSong.name}}</h1>
+                    <h2 class="subtitle">{{currentSong.singer}}</h2>
+                </div>
+
+                <div class="middle">
+                    <div class="middle-l">
+                        <div class="cd-wrapper">
+                            <div class="cd">
+                                <img class="image" :src="currentSong.image">
+                            </div>
                         </div>
                     </div>
                 </div>
-            </div>
 
-            <div class="bottom">
-                <div class="operators">
-                    <div class="icon i-left">
-                        <i class="icon-sequence"></i>
-                    </div>
-                    <div class="icon i-left">
-                        <i class="icon-prev"></i>
-                    </div>
-                    <div class="icon i-center">
-                        <i class="icon-play"></i>
-                    </div>
-                    <div class="icon i-right">
-                        <i class="icon-next"></i>
-                    </div>
-                    <div class="icon i-right">
-                        <i class="icon icon-not-favorite"></i>
+                <div class="bottom">
+                    <div class="operators">
+                        <div class="icon i-left">
+                            <i class="icon-sequence"></i>
+                        </div>
+                        <div class="icon i-left">
+                            <i class="icon-prev"></i>
+                        </div>
+                        <div class="icon i-center">
+                            <i class="icon-play"></i>
+                        </div>
+                        <div class="icon i-right">
+                            <i class="icon-next"></i>
+                        </div>
+                        <div class="icon i-right">
+                            <i class="icon icon-not-favorite"></i>
+                        </div>
                     </div>
                 </div>
+
             </div>
+        </transition>
 
-        </div>
+        <transition name="mini">
+            <div class="mini-player" v-show="!fullScreen" @click="open">
+                <div class="icon">
+                    <img width="40" height="40" :src="currentSong.image">
+                </div>
 
-        <div class="mini-player" v-show="!fullScreen" @click="open">
-            <div class="icon">
-                <img width="40" height="40" :src="currentSong.image">
+                <div class="text">
+                    <h2 class="name">{{currentSong.name}}</h2>
+                    <p class="desc">{{currentSong.singer}}</p>
+                </div>
+
+                <div class="control"></div>
+
+                <div class="control">
+                    <i class="icon-playlist"></i>
+                </div>
             </div>
-
-            <div class="text">
-                <h2 class="name">{{currentSong.name}}</h2>
-                <p class="desc">{{currentSong.singer}}</p>
-            </div>
-
-            <div class="control"></div>
-
-            <div class="control">
-                <i class="icon-playlist"></i>
-            </div>
-        </div>
+        </transition>
 
     </div>
 </template>
@@ -220,6 +225,24 @@ export default {
                 }
             }
         }
+
+        &.normal-enter-active, &.normal.leave-active {
+            transition: all 3s;
+
+            .top, .bottom {
+                transition: all 3s cubic-bezier(0.86,0.18,0.82,1.32);
+            }
+        }
+
+        &.nomral-enter, &.normal-leave-to {
+            opacity: 0;
+            .top {
+                transform: translate3d(0, -100px, 0);
+            }
+            .bottom {
+                transform: translate3d(0, 100px, 0);
+            }
+        }
     }
 
     .mini-player {
@@ -232,6 +255,15 @@ export default {
         width: 100%;
         height: 60px;
         background: $color-highlight-background;
+
+        &.mini-enter-active, &.mini-leave-active {
+            transition: all .4s;
+        }
+
+        &.mini-enter, &.mini-leave-to {
+            opacity: 0;
+        }
+
         .icon {
             flex: 0 0 40px;
             width: 40px;
