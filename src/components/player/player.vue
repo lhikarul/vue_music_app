@@ -17,7 +17,7 @@
 
                 <div class="middle">
                     <div class="middle-l">
-                        <div class="cd-wrapper">
+                        <div class="cd-wrapper" ref="cdWrapper">
                             <div class="cd">
                                 <img class="image" :src="currentSong.image">
                             </div>
@@ -99,15 +99,31 @@ export default {
                 }
             }
 
+            animations.registerAnimation({
+                name: 'move',
+                animation,
+                presets: {
+                    duration: 400,
+                    easing: "linear"
+                }
+            })
+
+            animations.runAnimation(this.$refs.cdWrapper, 'move', done);
+
         },
         afterEnter () {
-
+            animations.unregisterAnimation('move');
+            this.$refs.cdWrapper.style.animation = '';
         },
         leave(el, done) {
-
+            this.$refs.cdWrapper.style.transition = 'all .4s';
+            const {x,y,scale} = this.getPosAndScale();
+            this.$refs.cdWrapper.style.transform = `translate3d(${x}px,${y}px,0) scale(${scale})`;
+            this.$refs.cdWrapper.addEventListener("transitionend", done);
         },
         afterLeave () {
-
+            this.$refs.cdWrapper.style.transition = '';
+            this.$refs.cdWrapper.style.transform  = '';
         },
         getPosAndScale () {
             const targetWidth   = 40;
@@ -117,7 +133,7 @@ export default {
             const width         = window.innerWidth * 0.8;
             const scale         = targetWidth / width;
             const x             = -(window.innerWidth / 2 - paddingLeft);
-            const y             = window.innerHeight - paddingTop - (width/2) - paddingTop;
+            const y             = window.innerHeight - paddingTop - (width/2) - paddingBottom;
 
             return {
                 x,y,scale
