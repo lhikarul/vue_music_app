@@ -37,6 +37,7 @@ export default new Vuex.Store({
       state.singer = singer;
     },
     [types.SET_PLAYING_STATE](state, flag) {
+      console.log('set playing state ',flag)
       state.playing = flag
     },
     [types.SET_FULL_SCREEN](state,flag) {

@@ -18,7 +18,7 @@
                 <div class="middle">
                     <div class="middle-l">
                         <div class="cd-wrapper" ref="cdWrapper">
-                            <div class="cd">
+                            <div class="cd" :class="cdCls">
                                 <img class="image" :src="currentSong.image">
                             </div>
                         </div>
@@ -34,7 +34,7 @@
                             <i class="icon-prev"></i>
                         </div>
                         <div class="icon i-center">
-                            <i class="icon-play"></i>
+                            <i @click="togglePlaying" :class="playIcon"></i>
                         </div>
                         <div class="icon i-right">
                             <i class="icon-next"></i>
@@ -50,7 +50,7 @@
 
         <transition name="mini">
             <div class="mini-player" v-show="!fullScreen" @click="open">
-                <div class="icon">
+                <div class="icon" :class="cdCls">
                     <img width="40" height="40" :src="currentSong.image">
                 </div>
 
@@ -59,7 +59,9 @@
                     <p class="desc">{{currentSong.singer}}</p>
                 </div>
 
-                <div class="control"></div>
+                <div class="control">
+                    <i @click.stop="togglePlaying" :class="miniIcon"></i>
+                </div>
 
                 <div class="control">
                     <i class="icon-playlist"></i>
@@ -143,22 +145,42 @@ export default {
             }
 
         },
+        togglePlaying () {
+            this.setPlayingState(!this.playing);
+        },
         ...mapMutations({
-            setFullScreen: 'SET_FULL_SCREEN'
+            setFullScreen: 'SET_FULL_SCREEN',
+            setPlayingState: 'SET_PLAYING_STATE'
         })
     },
     computed: {
         ...mapGetters([
             'fullScreen',
             'playList',
-            'currentSong'
-        ])
+            'currentSong',
+            'playing'
+        ]),
+        playIcon () {
+            return this.playing ? 'icon-pause' : 'icon-play'
+        },
+        miniIcon () {
+            return this.playing ? 'icon-pause-mini' : 'icon-play-mini'
+        },
+        cdCls () {
+            return this.playing ? 'play' : 'play pause';
+        }
     },
     watch: {
         currentSong() {
             this.$nextTick(() => {
-                console.log(this.currentSong)
                 this.$refs.audio.play();
+            })
+        },
+        playing (newPlaying) {
+            const audio = this.$refs.audio;
+
+            this.$nextTick(() => {
+                newPlaying ? audio.play() : audio.pause();
             })
         }
     }
@@ -250,6 +272,23 @@ export default {
                         box-sizing: border-box;
                         border: 10px solid rgba(255,255,255,.1);
                         border-radius: 50%;
+
+                        &.play {
+                            animation: rotate 20s linear infinite;
+                        }
+
+                        &.pause {
+                            animation-play-state: paused;
+                        }
+
+                        .image {
+                            position: absolute;
+                            left: 0;
+                            top: 0;
+                            width: 100%;
+                            height: 100%;
+                            border-radius: 50%;
+                        }
                     }
                 }
             }
@@ -338,6 +377,13 @@ export default {
             width: 40px;
             padding: 0 10px 0 20px;
 
+            &.play {
+                animation: rotate 20s linear infinite;
+            }
+            &.pause {
+                animation-play-state: paused;
+            }
+
             img {
                 border-radius: 50%;
             }
@@ -376,6 +422,15 @@ export default {
             }
 
         }
+    }
+}
+
+@keyframes rotate {
+    0% {
+        transform: rotate(0);
+    }
+    100% {
+        transform: rotate(360deg);
     }
 }
     
