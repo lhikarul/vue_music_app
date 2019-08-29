@@ -1,11 +1,7 @@
 <template>
     <div class="player" v-show="playList.length > 0">
 
-<<<<<<< HEAD
-        <transition name="normal">
-=======
         <transition name="normal" @enter="enter" @after-enter="afterEnter" @leave="leave" @after-leave="afterLeave">
->>>>>>> 7.撥放器組件
             <div class="normal-player" v-show="fullScreen">
                 <div class="background">
                     <img width="100%" height="100%" :src="currentSong.image">
@@ -21,13 +17,8 @@
 
                 <div class="middle">
                     <div class="middle-l">
-<<<<<<< HEAD
-                        <div class="cd-wrapper">
-                            <div class="cd">
-=======
                         <div class="cd-wrapper" ref="cdWrapper">
                             <div class="cd" :class="cdCls">
->>>>>>> 7.撥放器組件
                                 <img class="image" :src="currentSong.image">
                             </div>
                         </div>
@@ -43,11 +34,7 @@
                             <i class="icon-prev"></i>
                         </div>
                         <div class="icon i-center">
-<<<<<<< HEAD
-                            <i class="icon-play"></i>
-=======
                             <i @click="togglePlaying" :class="playIcon"></i>
->>>>>>> 7.撥放器組件
                         </div>
                         <div class="icon i-right">
                             <i class="icon-next"></i>
@@ -63,11 +50,7 @@
 
         <transition name="mini">
             <div class="mini-player" v-show="!fullScreen" @click="open">
-<<<<<<< HEAD
-                <div class="icon">
-=======
                 <div class="icon" :class="cdCls">
->>>>>>> 7.撥放器組件
                     <img width="40" height="40" :src="currentSong.image">
                 </div>
 
@@ -76,25 +59,18 @@
                     <p class="desc">{{currentSong.singer}}</p>
                 </div>
 
-<<<<<<< HEAD
-                <div class="control"></div>
-=======
                 <div class="control">
                     <i @click.stop="togglePlaying" :class="miniIcon"></i>
                 </div>
->>>>>>> 7.撥放器組件
 
                 <div class="control">
                     <i class="icon-playlist"></i>
                 </div>
             </div>
         </transition>
-<<<<<<< HEAD
-=======
 
         <!-- <audio ref="audio" :src="currentSong.url"></audio> -->
         <audio ref="audio" src="http://aqqmusic.tc.qq.com/amobile.music.tc.qq.com/C400002qpjAV2lYx81.m4a?guid=4278676584&vkey=2C469CE50C4290B1ECFA1FFA3D0651180014B6BD5679990351DE3C112D99FA1A8994408F330DA03F2C4BCF134041F7E8E62913836D375CC7&uin=0&fromtag=38"></audio>
->>>>>>> 7.撥放器組件
 
     </div>
 </template>
@@ -102,7 +78,6 @@
 <script>
 import {mapGetters, mapMutations} from 'vuex';
 import animations from 'create-keyframe-animation';
-
 export default {
     name: 'player',
     methods: {
@@ -113,9 +88,7 @@ export default {
             this.setFullScreen(true);
         },
         enter (el, done) {
-
             const {x,y,scale} = this.getPosAndScale();
-
             var animation = {
                 0: {
                     transform: `translate3d(${x}px,${y}px,0) scale(${scale})`
@@ -127,7 +100,6 @@ export default {
                     transform: `translate3d(0,0,0) scale(1)`
                 }
             }
-
             animations.registerAnimation({
                 name: 'move',
                 animation,
@@ -136,9 +108,7 @@ export default {
                     easing: "linear"
                 }
             })
-
             animations.runAnimation(this.$refs.cdWrapper, 'move', done);
-
         },
         afterEnter () {
             animations.unregisterAnimation('move');
@@ -163,11 +133,9 @@ export default {
             const scale         = targetWidth / width;
             const x             = -(window.innerWidth / 2 - paddingLeft);
             const y             = window.innerHeight - paddingTop - (width/2) - paddingBottom;
-
             return {
                 x,y,scale
             }
-
         },
         togglePlaying () {
             this.setPlayingState(!this.playing);
@@ -202,7 +170,6 @@ export default {
         },
         playing (newPlaying) {
             const audio = this.$refs.audio;
-
             this.$nextTick(() => {
                 newPlaying ? audio.play() : audio.pause();
             })
@@ -214,7 +181,6 @@ export default {
 <style lang="scss" scoped>
 @import '~common/scss/const.scss';
 @import '~common/scss/mixin.scss';
-
 .player {
     .normal-player {
         position: fixed;
@@ -234,21 +200,18 @@ export default {
             opacity: .6;
             filter: blur(20px);
         }
-
         .top {
             .icon-back {
                 position: absolute;
                 top: 0;
                 left: 6px;
                 z-index: 50;
-
                 display: block;
                 padding: 9px;
                 font-size: $font-size-large-x;
                 color: $color-theme;
                 transform: rotate(-90deg);
             }
-
             .title {
                 width: 70%;
                 margin: 0 auto;
@@ -258,7 +221,6 @@ export default {
                 font-size: $font-size-large;
                 color: $color-text;
             }
-
             .subtitle {
                 line-height: 20px;
                 text-align: center;
@@ -266,7 +228,6 @@ export default {
                 color: $color-text;
             }
         }
-
         .middle {
             position: fixed;
             width: 100%;
@@ -274,7 +235,6 @@ export default {
             bottom: 170px;
             white-space: nowrap;
             font-size: 0;
-
             &-l {
                 display: inline-block;
                 vertical-align: top;
@@ -282,29 +242,24 @@ export default {
                 width: 100%;
                 height: 0;
                 padding-top: 80%;
-
                 .cd-wrapper {
                     position: absolute;
                     left: 10%;
                     top: 0;
                     width: 80%;
                     height: 100%;
-
                     .cd {
                         width: 100%;
                         height: 100%;
                         box-sizing: border-box;
                         border: 10px solid rgba(255,255,255,.1);
                         border-radius: 50%;
-
                         &.play {
                             animation: rotate 20s linear infinite;
                         }
-
                         &.pause {
                             animation-play-state: paused;
                         }
-
                         .image {
                             position: absolute;
                             left: 0;
@@ -317,29 +272,23 @@ export default {
                 }
             }
         }
-
         .bottom {
             position: absolute;
             bottom: 50px;
             width: 100%;
-
             .operators {
                 display: flex;
                 align-items: center;
-
                 .icon {
                     flex: 1;
                     color: $color-theme;
-
                     i {
                         font-size: 30px;
                     }
                 }
-
                 .i-left {
                     text-align: right;
                 }
-
                 .i-center {
                     padding: 0 20px;
                     text-align: center;
@@ -347,25 +296,20 @@ export default {
                         font-size: 40px;
                     }
                 }
-
                 .i-right {
                     text-align: left;
                 }
-
                 .icon-favorite {
                     color: $color-sub-theme;
                 }
             }
         }
-
         &.normal-enter-active, &.normal.leave-active {
             transition: all 3s;
-
             .top, .bottom {
                 transition: all 3s cubic-bezier(0.86,0.18,0.82,1.32);
             }
         }
-
         &.nomral-enter, &.normal-leave-to {
             opacity: 0;
             .top {
@@ -376,7 +320,6 @@ export default {
             }
         }
     }
-
     .mini-player {
         display: flex;
         align-items: center;
@@ -387,32 +330,26 @@ export default {
         width: 100%;
         height: 60px;
         background: $color-highlight-background;
-
         &.mini-enter-active, &.mini-leave-active {
             transition: all .4s;
         }
-
         &.mini-enter, &.mini-leave-to {
             opacity: 0;
         }
-
         .icon {
             flex: 0 0 40px;
             width: 40px;
             padding: 0 10px 0 20px;
-
             &.play {
                 animation: rotate 20s linear infinite;
             }
             &.pause {
                 animation-play-state: paused;
             }
-
             img {
                 border-radius: 50%;
             }
         }
-
         .text {
             display: flex;
             flex-direction: column;
@@ -432,23 +369,19 @@ export default {
                 color: $color-text-d
             }
         }
-
         .control {
             position: relative;
             flex: 0 0 30px;
             width: 30px;
             height: 30px;
             padding: 0 10px;
-
             .icon-playlist {
                 font-size: 30px;
                 color: $color-theme-d;
             }
-
         }
     }
 }
-
 @keyframes rotate {
     0% {
         transform: rotate(0);
