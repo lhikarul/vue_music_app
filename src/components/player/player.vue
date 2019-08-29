@@ -27,9 +27,11 @@
 
                 <div class="bottom">
                     
-                    <div class="progress-wrappe">
+                    <div class="progress-wrapper">
                         <span class="time time-l">{{format(currentTime)}}</span>
-                        <div class="progress-bar-wrapper"></div>
+                        <div class="progress-bar-wrapper">
+                            <progress-bar></progress-bar>
+                        </div>
                         <span class="time time-r">3:32</span>
                     </div>
 
@@ -86,8 +88,13 @@
 import {mapGetters, mapMutations} from 'vuex';
 import animations from 'create-keyframe-animation';
 
+import ProgressBar from 'base/progress-bar/progressBar';
+
 export default {
     name: 'player',
+    components: {
+        ProgressBar
+    },
     data () {
         return {
             songReady: false,
@@ -374,6 +381,30 @@ export default {
             position: absolute;
             bottom: 50px;
             width: 100%;
+            
+            .progress-wrapper {
+                display: flex;
+                align-items: center;
+                width: 80%;
+                margin: 0 auto;
+                padding: 10px 0;
+                .time {
+                    color: $color-text;
+                    font-size: $font-size-small;
+                    flex: 0 0 30px;
+                    line-height: 30px;
+                    width: 30px;
+                    &.time-l {
+                        text-align: left;
+                    }
+                    &.time-r {
+                        text-align: right;
+                    }
+                }
+                .progress-bar-wrapper {
+                    flex: 1;
+                }
+            }
 
             .operators {
                 display: flex;
