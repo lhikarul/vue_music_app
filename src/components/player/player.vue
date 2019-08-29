@@ -30,13 +30,13 @@
                         <div class="icon i-left">
                             <i class="icon-sequence"></i>
                         </div>
-                        <div class="icon i-left">
+                        <div class="icon i-left" :class="disabledCls">
                             <i @click="prev" class="icon-prev"></i>
                         </div>
-                        <div class="icon i-center">
+                        <div class="icon i-center" :class="disabledCls">
                             <i @click="togglePlaying" :class="playIcon"></i>
                         </div>
-                        <div class="icon i-right">
+                        <div class="icon i-right" :class="disabledCls">
                             <i @click="next" class="icon-next"></i>
                         </div>
                         <div class="icon i-right">
@@ -70,7 +70,7 @@
         </transition>
 
         <!-- <audio ref="audio" :src="currentSong.url"></audio> -->
-        <audio @canplay="ready" ref="audio" src="http://aqqmusic.tc.qq.com/amobile.music.tc.qq.com/C400002qpjAV2lYx81.m4a?guid=4278676584&vkey=2C469CE50C4290B1ECFA1FFA3D0651180014B6BD5679990351DE3C112D99FA1A8994408F330DA03F2C4BCF134041F7E8E62913836D375CC7&uin=0&fromtag=38"></audio>
+        <audio @error="error" @canplay="ready" ref="audio" src="http://aqqmusic.tc.qq.com/amobile.music.tc.qq.com/C400002qpjAV2lYx81.m4a?guid=4278676584&vkey=2C469CE50C4290B1ECFA1FFA3D0651180014B6BD5679990351DE3C112D99FA1A8994408F330DA03F2C4BCF134041F7E8E62913836D375CC7&uin=0&fromtag=38"></audio>
 
     </div>
 </template>
@@ -84,6 +84,7 @@ export default {
     data () {
         return {
             songReady: false,
+            songUrl: ''
         }
     },
     methods: {
@@ -167,7 +168,10 @@ export default {
                 this.togglePlaying()
             }
 
-            this.songReady = false;
+            // this.songReady = false;
+            // 由於前 song url 為固定，直接調用 ready ()
+            this.ready();
+
         },
         prev () {
 
@@ -183,13 +187,13 @@ export default {
                 this.togglePlaying()
             }
 
-            this.songReady = false;
+            // this.songReady = false;
         },
         ready () {
             this.songReady = true;
         },
         error () {
-            
+            this.songReady = true;
         },
         ...mapMutations({
             setFullScreen: 'SET_FULL_SCREEN',
@@ -210,6 +214,9 @@ export default {
         },
         miniIcon () {
             return this.playing ? 'icon-pause-mini' : 'icon-play-mini'
+        },
+        disabledCls () {
+            return this.songReady ? '' : 'disable'
         },
         cdCls () {
             return this.playing ? 'play' : 'play pause';
@@ -347,6 +354,10 @@ export default {
             .operators {
                 display: flex;
                 align-items: center;
+
+                &.disabledCls {
+                    color: $color-theme-d;
+                }
 
                 .icon {
                     flex: 1;
