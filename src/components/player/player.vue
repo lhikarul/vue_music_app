@@ -67,6 +67,9 @@
             </div>
         </transition>
 
+        <!-- <audio ref="audio" :src="currentSong.url"></audio> -->
+        <audio ref="audio" src="http://aqqmusic.tc.qq.com/amobile.music.tc.qq.com/C400002qpjAV2lYx81.m4a?guid=4278676584&vkey=2C469CE50C4290B1ECFA1FFA3D0651180014B6BD5679990351DE3C112D99FA1A8994408F330DA03F2C4BCF134041F7E8E62913836D375CC7&uin=0&fromtag=38"></audio>
+
     </div>
 </template>
 
@@ -150,6 +153,14 @@ export default {
             'playList',
             'currentSong'
         ])
+    },
+    watch: {
+        currentSong() {
+            this.$nextTick(() => {
+                console.log(this.currentSong)
+                this.$refs.audio.play();
+            })
+        }
     }
 }
 </script>

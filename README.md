@@ -1,5 +1,7 @@
 # vue-music
 
+test
+
 ## Project setup
 ```
 npm install
