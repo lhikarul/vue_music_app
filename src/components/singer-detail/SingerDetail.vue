@@ -7,8 +7,9 @@
 <script>
 import {mapGetters} from 'vuex';
 
-import {requestSingerDetail} from '@/api/singer';
-import {ERR_OK} from '@/api/config';
+import {requestSingerDetail} from 'api/singer';
+import {ERR_OK} from 'api/config';
+import {getSongVkey} from 'api/song';
 
 import MusicList from 'components/music-list/musicList';
 import {createSong} from 'common/js/song';
@@ -33,18 +34,30 @@ export default {
             requestSingerDetail(this.singer.id).then((res) => {
                 if (res.code === ERR_OK) {
                     this.songs = this.normalizeSongs(res.data.list);
-                    console.log()
                 }
             })
         },
         normalizeSongs (list) {
             var ret = [];
             list.forEach((item) => {
+
                 let {musicData} = item;
                 if (musicData.songid && musicData.albummid) {
                     ret.push(createSong(musicData))
                 }
+
+                // let {musicData} = item;
+
+                // getSongVkey(musicData.songmid).then((res) => {
+                //     const songVkey = res.data.items[0].vkey
+                //     if (musicData.songid && musicData.albummid) {
+
+                //         ret.push(createSong(musicData, songVkey))
+                //     }
+                // })
+
             })
+
             return ret;
         }
     },
