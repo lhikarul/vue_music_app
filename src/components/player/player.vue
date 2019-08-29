@@ -31,13 +31,13 @@
                             <i class="icon-sequence"></i>
                         </div>
                         <div class="icon i-left">
-                            <i class="icon-prev"></i>
+                            <i @click="prev" class="icon-prev"></i>
                         </div>
                         <div class="icon i-center">
                             <i @click="togglePlaying" :class="playIcon"></i>
                         </div>
                         <div class="icon i-right">
-                            <i class="icon-next"></i>
+                            <i @click="next" class="icon-next"></i>
                         </div>
                         <div class="icon i-right">
                             <i class="icon icon-not-favorite"></i>
@@ -70,7 +70,7 @@
         </transition>
 
         <!-- <audio ref="audio" :src="currentSong.url"></audio> -->
-        <audio ref="audio" src="http://aqqmusic.tc.qq.com/amobile.music.tc.qq.com/C400002qpjAV2lYx81.m4a?guid=4278676584&vkey=2C469CE50C4290B1ECFA1FFA3D0651180014B6BD5679990351DE3C112D99FA1A8994408F330DA03F2C4BCF134041F7E8E62913836D375CC7&uin=0&fromtag=38"></audio>
+        <audio @canplay="ready" ref="audio" src="http://aqqmusic.tc.qq.com/amobile.music.tc.qq.com/C400002qpjAV2lYx81.m4a?guid=4278676584&vkey=2C469CE50C4290B1ECFA1FFA3D0651180014B6BD5679990351DE3C112D99FA1A8994408F330DA03F2C4BCF134041F7E8E62913836D375CC7&uin=0&fromtag=38"></audio>
 
     </div>
 </template>
@@ -81,6 +81,11 @@ import animations from 'create-keyframe-animation';
 
 export default {
     name: 'player',
+    data () {
+        return {
+            songReady: false,
+        }
+    },
     methods: {
         back () {
             this.setFullScreen(false);
@@ -148,9 +153,48 @@ export default {
         togglePlaying () {
             this.setPlayingState(!this.playing);
         },
+        next () {
+
+            if (!this.songReady) return;
+
+            const index = this.currentIndex + 1;
+            if (index === this.playList.length) {
+                index = 0;
+            }
+            this.setCurrentIndex(index);
+
+            if (!this.playing) {
+                this.togglePlaying()
+            }
+
+            this.songReady = false;
+        },
+        prev () {
+
+            if (!this.songReady) return;
+
+            const index = this.currentIndex - 1;
+            if (index === -1) {
+                index = this.playList.length - 1;
+            }
+            this.setCurrentIndex(index);
+
+            if (!this.playing) {
+                this.togglePlaying()
+            }
+
+            this.songReady = false;
+        },
+        ready () {
+            this.songReady = true;
+        },
+        error () {
+            
+        },
         ...mapMutations({
             setFullScreen: 'SET_FULL_SCREEN',
-            setPlayingState: 'SET_PLAYING_STATE'
+            setPlayingState: 'SET_PLAYING_STATE',
+            setCurrentIndex: 'SET_CURRENT_INDEX'
         })
     },
     computed: {
@@ -158,7 +202,8 @@ export default {
             'fullScreen',
             'playList',
             'currentSong',
-            'playing'
+            'playing',
+            'currentIndex'
         ]),
         playIcon () {
             return this.playing ? 'icon-pause' : 'icon-play'
