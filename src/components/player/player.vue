@@ -30,9 +30,9 @@
                     <div class="progress-wrapper">
                         <span class="time time-l">{{format(currentTime)}}</span>
                         <div class="progress-bar-wrapper">
-                            <progress-bar></progress-bar>
+                            <progress-bar :percent="percent" @percentChange="onProgressBarChange"></progress-bar>
                         </div>
-                        <span class="time time-r">3:32</span>
+                        <span class="time time-r">{{format(currentSong.duration)}}</span>
                     </div>
 
                     <div class="operators">
@@ -79,8 +79,7 @@
         </transition>
 
         <!-- <audio ref="audio" :src="currentSong.url"></audio> -->
-        <audio @timeupdate="updateTime" @error="error" @canplay="ready" ref="audio" src="http://aqqmusic.tc.qq.com/amobile.music.tc.qq.com/C400002qpjAV2lYx81.m4a?guid=4278676584&vkey=2C469CE50C4290B1ECFA1FFA3D0651180014B6BD5679990351DE3C112D99FA1A8994408F330DA03F2C4BCF134041F7E8E62913836D375CC7&uin=0&fromtag=38"></audio>
-
+        <audio @timeupdate="updateTime" @error="error" @canplay="ready" ref="audio" src="http://aqqmusic.tc.qq.com/amobile.music.tc.qq.com/C400002qpjAV2lYx81.m4a?guid=70331947&vkey=19344028A5967D7E107122B85569883774C6A79FB2D09543010F36BFCA6D9022120FD3329E385984CBC22C35CF3FE29F2EC359A4894431DC&uin=0&fromtag=38"></audio>
     </div>
 </template>
 
@@ -219,6 +218,13 @@ export default {
             }
             return num;
         },
+        onProgressBarChange (percent) {
+            this.$refs.audio.currentTime = this.currentSong.duration * percent;
+
+            if (!this.playing) {
+                this.togglePlaying();
+            }
+        },
         ...mapMutations({
             setFullScreen: 'SET_FULL_SCREEN',
             setPlayingState: 'SET_PLAYING_STATE',
@@ -244,6 +250,9 @@ export default {
         },
         cdCls () {
             return this.playing ? 'play' : 'play pause';
+        },
+        percent () {
+            return this.currentTime / this.currentSong.duration;
         }
     },
     watch: {
