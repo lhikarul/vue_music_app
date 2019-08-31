@@ -23,29 +23,6 @@ export default {
 
 <style lang="scss" scoped>
 
-@import '~common/scss/const';
-@import '~common/scss/mixin';
+@import '~common/scss/tab/tab';
 
-    .tab {
-        display: flex;
-        height: 44px;
-        line-height: 44px;
-        text-align: center;
-
-        &-item {
-            flex: 1;
-        }
-
-        &-item-link {
-            padding-bottom: 5px;
-            color: $color-text-l;
-        }
-
-        &-item.router-link-active {
-            .tab-item-link {
-                color: $color-theme;
-                border-bottom: 2px solid $color-theme;
-            }
-        }
-    }
 </style>
