@@ -93,6 +93,7 @@ import ProgressBar from 'base/progress-bar/progressBar';
 import ProgressCircle from 'base/progress-circle/progress-circle';
 
 import {playMode} from 'common/js/config';
+import {shuffle} from 'common/js/util';
 
 export default {
     name: 'player',
@@ -220,6 +221,23 @@ export default {
         changeMode () {
             const mode = (this.mode + 1) % 3;
             this.setPlayMode(mode);
+            var list = null;
+
+            if (mode === playMode.random) {
+                list = shuffle(this.sequenceList)
+            }else {
+                list = this.sequenceList;
+            }
+
+            this.resetCurrentIndex(list);
+            this.setPlayList(list);
+
+        },
+        resetCurrentIndex (list) {
+            var index = list.findIndex((item) => {
+                return item.id === this.currentSong.id;
+            })
+            this.setCurrentIndex(index);
         },
         pad (num, n=2) {
             var len = num.toString().length;
@@ -240,7 +258,8 @@ export default {
             setFullScreen: 'SET_FULL_SCREEN',
             setPlayingState: 'SET_PLAYING_STATE',
             setCurrentIndex: 'SET_CURRENT_INDEX',
-            setPlayMode: 'SET_PLAY_MODE'
+            setPlayMode: 'SET_PLAY_MODE',
+            setPlayList: 'SET_PLAYLIST'
         })
     },
     computed: {
@@ -250,7 +269,8 @@ export default {
             'currentSong',
             'playing',
             'currentIndex',
-            'mode'
+            'mode',
+            'sequenceList'
         ]),
         playIcon () {
             return this.playing ? 'icon-pause' : 'icon-play'
@@ -273,8 +293,12 @@ export default {
     },
     watch: {
         currentSong() {
-            this.$nextTick(() => {
+            this.$nextTick((newSong,oldSong) => {
+
+                if (newSong.id === oldSong.id) return;
+
                 this.$refs.audio.play();
+
             })
         },
         playing (newPlaying) {
