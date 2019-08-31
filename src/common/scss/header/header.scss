@@ -1,0 +1,27 @@
+@import '~common/scss/const';
+@import '~common/scss/mixin';
+
+.header {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    height: 44px;
+    text-align: center;
+    color: $color-theme;
+    font-size: 0;
+
+    .icon {
+        width: 30px;
+        height: 32px;
+        margin-top: 6px;
+        margin-right: 9px;
+        @include bg-image('../../assets/logo');
+        background-size: 30px 32px;
+    }
+
+    .text {
+        margin-top: 6px;
+        line-height: 44px;
+        font-size: 18px;
+    }
+}
