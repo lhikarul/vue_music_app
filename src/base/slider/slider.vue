@@ -132,7 +132,11 @@ export default {
         window.addEventListener('resize', () => {
             if (!this.slider) return;
             this.setSliderWidth(true);
+            this.slider.refresh();
         })   
+    },
+    destroyed () {
+        clearTimeout(this.timer);
     }
 }
 </script>

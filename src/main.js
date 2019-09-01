@@ -9,9 +9,9 @@ import "./common/scss/index.scss";
 
 Vue.config.productionTip = false
 
-// Vue.use(VueLazyLoad, {
-//   loading: require('@/common/img/default.png')
-// })
+Vue.use(VueLazyLoad, {
+    loading: require('@/common/img/default.png')
+})
 
 new Vue({
     router,
