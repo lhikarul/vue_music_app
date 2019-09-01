@@ -2,7 +2,12 @@
     <div id="app">
         <header-component></header-component>
         <Tab></Tab>
-        <router-view></router-view>
+
+        <!-- 將 dom 緩存至內存 -->
+        <keep-alive> 
+            <router-view></router-view>
+        </keep-alive>
+
     </div>
 </template>
 
