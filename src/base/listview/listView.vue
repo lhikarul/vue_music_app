@@ -89,6 +89,8 @@ export default {
         },
         scrollTo (index) {
             // 歌手區塊索引滾動
+            // 高亮當前列表
+            this.scrollY = -this.listHeight[index]
             this.$refs.listView.scrollToElement(this.$refs.listGroup[index],0);
         },
         calculateHeight () {
@@ -119,7 +121,7 @@ export default {
             },20)
         },
         scrollY(newY) {
-
+            
             // 判斷y的值會落在哪一個區間
             // 滾動至頂部、中間部分滾動、滾動至底部
             const listHeight = this.listHeight;
@@ -132,13 +134,15 @@ export default {
             for (let i=0; i<listHeight.length - 1; i++) {
                 const minHeight = listHeight[i]
                 const maxHeight = listHeight[i+1]
+                
+                console.log(minHeight,maxHeight,newY)
 
-                if (!maxHeight || (-newY > minHeight && -newY < maxHeight)) {
+                if (!maxHeight || (-newY >= minHeight && -newY < maxHeight)) {
                     this.currentIndex = i;
                     return;
                 }
             }
-
+            
             this.currentIndex = listHeight.length - 2;
         }
     },
