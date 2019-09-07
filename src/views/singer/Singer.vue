@@ -1,6 +1,10 @@
 <template>
     <div class="singer">
-        <list-view :data="singers"></list-view>
+        <list-view :data="singers" @select="selectSinger"></list-view>
+
+        <transition name="slide">
+            <router-view></router-view>
+        </transition>
     </div>
 </template>
 
@@ -11,6 +15,8 @@ import {ERR_OK} from 'api/config';
 import Singer from 'common/js/singer';
 
 import ListView from 'base/listview/listView';
+
+import {mapMutations} from 'vuex';
 
 const HOT_NAME = "热门";
 const HOT_SINGER_LEN = 10;
@@ -89,7 +95,19 @@ export default {
             })
             
             return hot.concat(ret);
-        }
+        },
+        selectSinger(singer) {
+
+            this.$router.push({
+                path: `/singer/${singer.id}`
+            })
+
+            // 將 stroe 的 singer 狀態設為傳入的歌手
+            this.setSinger(singer);
+        },
+        ...mapMutations({
+            setSinger: 'SET_SINGER'
+        })
     },
     created () {
         this.getSingerList();
@@ -105,5 +123,14 @@ export default {
         top: 88px;
         bottom: 0;
     }
+
+    .slide-enter-active, .slide-leave-active {
+        transition: all .3s;
+    }
+
+    .slide-enter, .slide-leave-to {
+        transform: translate3d(100%, 0, 0);
+    }
+
     
 </style>
