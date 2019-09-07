@@ -23,6 +23,10 @@
                 </li>
             </ul>
         </div>
+
+        <div class="list-fixed" v-show="fixedTitle" ref="fixed">
+            <h1 class="fixed-title">{{fixedTitle}}</h1>
+        </div>
     </scroll>
 </template>
 
@@ -32,6 +36,7 @@ import Scroll from 'base/scroll/scroll';
 import {getData} from 'common/js/dom';
 
 const ANCHOR_HEIGHT = 18;
+const TITLE_HEIGHT = 30;
 
 export default {
     components: {
@@ -48,7 +53,8 @@ export default {
     data () {
         return {
             scrollY: -1,
-            currentIndex: 0
+            currentIndex: 0,
+            diff: -1
         }
     },
     methods: {
@@ -88,6 +94,17 @@ export default {
             this.scrollY = pos.y
         },
         scrollTo (index) {
+
+            if (!index) return;
+
+            if (index < 0) {
+                index = 0;
+            }
+
+            if (index > this.listHeight.length - 2) {
+                index = this.listHeight.length - 2;
+            }
+
             // 歌手區塊索引滾動
             // 高亮當前列表
             this.scrollY = -this.listHeight[index]
@@ -112,6 +129,13 @@ export default {
         shortcutList () {
             // 獲取字母列表
             return this.data.map((item) => item.title)
+        },
+        fixedTitle () {
+            // 取得標題
+
+            if (this.scrollY > 0) return;
+
+            return this.data[this.currentIndex] ? this.data[this.currentIndex].title : '';
         }
     },
     watch: {
@@ -135,15 +159,27 @@ export default {
                 const minHeight = listHeight[i]
                 const maxHeight = listHeight[i+1]
                 
-                console.log(minHeight,maxHeight,newY)
-
                 if (!maxHeight || (-newY >= minHeight && -newY < maxHeight)) {
+
                     this.currentIndex = i;
+
+                    // 每個 li 的上限 與 scroll 的距離
+                    this.diff = maxHeight + newY;
                     return;
                 }
             }
             
             this.currentIndex = listHeight.length - 2;
+        },
+        diff (delta) {
+            var fixedTop = (delta > 0 && delta < TITLE_HEIGHT) ? delta - TITLE_HEIGHT : 0;
+
+            if (this.fixedTop === fixedTop) return;
+
+            this.fixedTop = fixedTop;
+
+            // this.$refs.fixed.style.transofrm = `translateY(${fixedTop}px)`;
+            this.$refs.fixed.style.transform = `translate3d(0, ${fixedTop}px, 0)`;
         }
     },
     created () {
