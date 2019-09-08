@@ -11,7 +11,6 @@
 
 <script>
 import BScroll from 'better-scroll';
-import { setTimeout, clearTimeout } from 'timers';
 
 import {addClass} from 'common/js/dom';
 

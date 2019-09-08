@@ -57,7 +57,6 @@ export default {
     methods: {
         requestRecommendList () {
             getRecommendList().then((res) => {
-
                 if (res.code === ERR_OK) {
                     this.recommendsList = res.data.slider;
                 }
