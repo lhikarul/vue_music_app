@@ -1,10 +1,12 @@
 <template>
     <div class="singer">
+        
         <list-view :data="singers" @select="selectSinger"></list-view>
 
         <transition name="slide">
             <router-view></router-view>
         </transition>
+        
     </div>
 </template>
 

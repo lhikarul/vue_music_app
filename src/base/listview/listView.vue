@@ -11,6 +11,7 @@
                 </ul>
             </li>
         </ul>
+        
         <div class="list-shortcut" @touchstart="onShortcutTouchStart" @touchmove.stop.prevent="onShortcutTouchMove">
             <ul>
                 <li v-for="(item,index) in shortcutList" 
@@ -68,7 +69,6 @@ export default {
 
             const anchorIndex = getData(e.target, 'index');
             const firstTouch  = e.touches[0];
-
             this.touch.y1 = firstTouch.pageY;
             this.touch.anchorIndex = anchorIndex;
 
@@ -107,8 +107,9 @@ export default {
 
             // 歌手區塊索引滾動
             // 高亮當前列表
-            this.scrollY = -this.listHeight[index]
+            // this.scrollY = -this.listHeight[index]
             this.$refs.listView.scrollToElement(this.$refs.listGroup[index],0);
+
         },
         calculateHeight () {
             // 獲得元素各自的高度
