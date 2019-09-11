@@ -1,5 +1,6 @@
 <template>
     <div id="app">
+
         <header-component></header-component>
         <Tab></Tab>
 
@@ -8,18 +9,22 @@
             <router-view></router-view>
         </keep-alive>
 
+        <player></player>
+
     </div>
 </template>
 
 <script>
 import HeaderComponent from 'components/header/Header';
 import Tab from 'components/tab/Tab';
+import Player from 'components/player/player';
 
 export default {
     name: 'app',
     components: {
         HeaderComponent,
-        Tab
+        Tab,
+        Player
     }
 }
 </script>

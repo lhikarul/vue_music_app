@@ -59,6 +59,15 @@ export default new Vuex.Store({
             return state.playlist[state.currentIndex] || {}
         }
     },
+    actions: {
+        selectPlay ({commit,state},{list,index}) {
+            commit(types.SET_SEQUENCE_LIST,list);
+            commit(types.SET_PLAYLIST, list);
+            commit(types.SET_CURRENT_INDEX,index);
+            commit(types.SET_FULL_SCREEN, true);
+            commit(types.SET_PLAYLIST, true);
+        }
+    },
     strict: debug,
     plugins: debug ? [createLogger()] : []
 })
