@@ -1,5 +1,5 @@
 <template>
-    <div>
+    <div class="singer-detail">
         <music-list :songs="songs" :title="title" :bg-image="bgImage"></music-list>
     </div>
 </template>
@@ -70,4 +70,15 @@ export default {
 
 <style lang="scss" scoped>
 
+    @import '~common/scss/const';
+
+    .singer-detail {
+            position: fixed;
+            z-index: 100;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: $color-background;
+        }
 </style>
