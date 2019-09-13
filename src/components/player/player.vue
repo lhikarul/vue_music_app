@@ -1,22 +1,103 @@
 <template>
     <div class="player">
+
         <div class="normal-player" v-show="fullScreen">
-            撥放器
+            <div class="background">
+                <img width="100%" height="100%" :src="currentSong.image">
+            </div>
+
+            <div class="top">
+                <div class="back" @click="back">
+                    <i class="icon-back"></i>
+                </div>
+                <h1 class="title">{{currentSong.name}}</h1>
+                <h2 class="subtitle">{{currentSong.singer}}</h2>
+            </div>
+
+            <div class="middle">
+                <div class="middle-l">
+                    <div class="cd-wrapper">
+                        <div class="cd">
+                            <img class="image" :src="currentSong.image">
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="bottom">
+                
+                <div class="progress-wrapper">
+                    <span class="time time-l"></span>
+                    <div class="progress-bar-wrapper">
+                        
+                    </div>
+                    <span class="time time-r"></span>
+                </div>
+
+                <div class="operators">
+                    <div class="icon i-left" >
+                        <i></i>
+                    </div>
+                    <div class="icon i-left">
+                        <i class="icon-prev"></i>
+                    </div>
+                    <div class="icon i-center">
+                        <i></i>
+                    </div>
+                    <div class="icon i-right">
+                        <i class="icon-next"></i>
+                    </div>
+                    <div class="icon i-right">
+                        <i class="icon icon-not-favorite"></i>
+                    </div>
+                </div>
+            </div>
         </div>
-        <div class="mini-player" v-show="!fullScreen"></div>
+        <div class="mini-player" v-show="!fullScreen" @click="open">
+            <div class="mini-player">
+                <div class="icon">
+                    <img width="40" height="40" :src="currentSong.image">
+                </div>
+
+                <div class="text">
+                    <h2 class="name">{{currentSong.name}}</h2>
+                    <p class="desc">{{currentSong.singer}}</p>
+                </div>
+
+                <div class="control">
+                    
+                </div>
+
+                <div class="control">
+                    <i class="icon-playlist"></i>
+                </div>
+            </div>
+        </div>
     </div>
 </template>
 
 <script>
-import {mapGetters} from 'vuex';
+import {mapGetters, mapMutations} from 'vuex';
 
 export default {
     name: 'Player',
     computed: {
         ...mapGetters([
             'fullScreen',
-            'playlist'
+            'playlist',
+            'currentSong'
         ])
+    },
+    methods: {
+        open () {
+            this.setFullScreen(true);
+        },
+        back () {
+            this.setFullScreen(false);
+        },
+        ...mapMutations({
+            setFullScreen: 'SET_FULL_SCREEN'
+        })
     }
 }
 </script>
