@@ -24,6 +24,14 @@
                             </div>
                         </div>
                     </div>
+
+                    <scroll class="middle-r" ref="lyricList" :data="currentLyric && currentLyric.lines">
+                        <div class="lyric-wrapper">
+                            <div v-if="currentLyric">
+                                <p ref="lyricLine" :class="{'current': currentLineNum === index}" class="text" v-for="(line,index) in currentLyric.lines" :key="index">{{line.txt}}</p>
+                            </div>
+                        </div>
+                    </scroll>
                 </div>
 
                 <div class="bottom">
@@ -102,6 +110,8 @@ import {shuffle} from 'common/js/util';
 import {playMode} from 'common/js/config';
 import Lyric from 'lyric-parser';
 
+import Scroll from 'base/scroll/scroll';
+
 export default {
     name: 'Player',
     data () {
@@ -109,12 +119,14 @@ export default {
             songReady: false,
             currentTime: 0,
             radius: 32,
-            currentLyric: null
+            currentLyric: null,
+            currentLineNum: 0
         }
     },
     components: {
         ProgressBar,
-        ProgressCircle
+        ProgressCircle,
+        Scroll
     },
     computed: {
         cdCls() {
@@ -322,9 +334,21 @@ export default {
         },
         getLyric () {
             this.currentSong.getLyric().then(lyric => {
-                this.currentLyric = new Lyric(lyric);
-                console.log(this.currentLyric)
+                this.currentLyric = new Lyric(lyric, this.handleLyric);
+                
+                if (this.playing) {
+                    this.currentLyric.play();
+                }
             })
+        },
+        handleLyric ({lineNum,txt}) {
+            this.currentLineNum = lineNum;
+            if (lineNum > 5) {
+                let lineEl = this.$refs.lyricLine[lineNum - 5];
+                this.$refs.lyricList.scrollToElement(lineEl, 1000)
+            }else {
+                this.$refs.lyricList.scrollTo(0,0,1000)
+            }
         },
         ...mapMutations({
             setFullScreen: 'SET_FULL_SCREEN',
@@ -443,6 +467,27 @@ export default {
                             width: 100%;
                             height: 100%;
                             border-radius: 50%;
+                        }
+                    }
+                }
+            }
+            &-r {
+                display: inline-block;
+                vertical-align: top;
+                width: 100%;
+                height: 100%;
+                overflow: hidden;
+                .lyric-wrapper {
+                    width: 80%;
+                    margin: 0 auto;
+                    overflow: hidden;
+                    text-align: center;
+                    .text {
+                        line-height: 32px;
+                        color: $color-text-l;
+                        font-size: $font-size-medium;
+                        &.current {
+                            color: $color-text;
                         }
                     }
                 }
