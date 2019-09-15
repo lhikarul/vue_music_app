@@ -37,9 +37,6 @@ export default new Vuex.Store({
         [types.SET_SEQUENCE_LIST](state,list) {
             state.sequenceList = list
         },
-        [types.SET_PLAY_MODE](state,list) {
-            state.sequenceList = list
-        },
         [types.SET_PLAY_MODE](state,mode) {
             state.mode = mode
         },

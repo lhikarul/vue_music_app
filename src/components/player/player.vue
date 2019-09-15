@@ -40,14 +40,14 @@
                         <div class="icon i-left" >
                             <i class="icon-sequence"></i>
                         </div>
-                        <div class="icon i-left">
-                            <i class="icon-prev"></i>
+                        <div class="icon i-left" :class="disableCls">
+                            <i class="icon-prev" @click="prev"></i>
                         </div>
-                        <div class="icon i-center">
+                        <div class="icon i-center" :class="disableCls">
                             <i @click="togglePlaying" :class="playIcon"></i>
                         </div>
-                        <div class="icon i-right">
-                            <i class="icon-next"></i>
+                        <div class="icon i-right" :class="disableCls">
+                            <i class="icon-next" @click="next"></i>
                         </div>
                         <div class="icon i-right">
                             <i class="icon icon-not-favorite"></i>
@@ -84,7 +84,7 @@
 
         </transition>
         
-        <audio ref="audio" :src="currentSong.url"></audio>
+        <audio ref="audio" :src="currentSong.url" @canplay="ready" @error="error"></audio>
 
     </div>
 </template>
@@ -96,6 +96,11 @@ import animations from 'create-keyframe-animation';
 
 export default {
     name: 'Player',
+    data () {
+        return {
+            songReady: false
+        }
+    },
     computed: {
         cdCls() {
             return this.playing ? 'play' : 'play pause';
@@ -106,11 +111,15 @@ export default {
         miniIcon () {
             return this.playing ? 'icon-pause-mini' : 'icon-play-mini';
         },
+        disableCls () {
+            return this.songReady ? '' : 'disabled';
+        },
         ...mapGetters([
             'fullScreen',
             'playlist',
             'currentSong',
-            'playing'
+            'playing',
+            'currentIndex'
         ])
     },
     methods: {
@@ -189,9 +198,50 @@ export default {
         togglePlaying () {
             this.setPlayingState(!this.playing);
         },
+        next () {
+
+            if (!this.songReady) return;
+
+            var index = this.currentIndex + 1;
+            if (index === this.playlist.length) {
+                index = 0;
+            }
+            this.setCurrentIndex(index);
+            
+            // 暫停，撥放下一首，切換 play 狀態
+            if (!this.playing) {
+                this.togglePlaying()
+            }
+
+            this.songReady = false;
+
+        },
+        prev () {
+            if (!this.songReady) return;
+
+            var index = this.currentIndex - 1;
+            if (index === -1) {
+                index = this.playlist.length - 1;
+            }
+            this.setCurrentIndex(index);
+
+            // 暫停，撥放上一首，切換 play 狀態
+            if (!this.playing) {
+                this.togglePlaying()
+            }
+
+            this.songReady = false;
+        },
+        ready () {
+            this.songReady = true;
+        },
+        error () {
+            this.songReady = true;
+        },
         ...mapMutations({
             setFullScreen: 'SET_FULL_SCREEN',
-            setPlayingState: 'SET_PLAYING_STATE'
+            setPlayingState: 'SET_PLAYING_STATE',
+            setCurrentIndex: 'SET_CURRENT_INDEX'
         })
     },
     watch: {
@@ -403,7 +453,7 @@ export default {
             padding: 0 10px 0 20px;
 
             img {
-                
+
                 border-radius: 50%;
 
                 &.play {
