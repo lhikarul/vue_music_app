@@ -6,6 +6,7 @@ import * as types from './mutation-types';
 import createLogger from 'vuex/dist/logger';
 
 import {playMode} from 'common/js/config';
+import {shuffle} from 'common/js/util';
 
 Vue.use(Vuex);
 
@@ -21,7 +22,7 @@ export default new Vuex.Store({
         mode: playMode.sequence,
         currentIndex: -1
     },
-    mutations: {
+    mutations: { 
         [types.SET_SINGER](state,singer) {
             state.singer = singer;
         },
@@ -59,14 +60,38 @@ export default new Vuex.Store({
     actions: {
         selectPlay ({commit,state},{list,index}) {
             commit(types.SET_SEQUENCE_LIST,list);
-            commit(types.SET_PLAYLIST, list);
+            
+            if (state.mode === playMode.random) {
+                var randomList = shuffle(list);
+                commit(types.SET_PLAYLIST, randomList);
+                index = findIndex(randomList,list[index]);
+            }else {
+                commit(types.SET_PLAYLIST, list);
+            }
+
             commit(types.SET_CURRENT_INDEX,index);
             commit(types.SET_FULL_SCREEN, true);
             commit(types.SET_PLAYING_STATE, true);
-        }
+        },
+        randomPlay({commit},{list}) {
+
+            commit(types.SET_PLAY_MODE, playMode.random);
+            commit(types.SET_SEQUENCE_LIST,list);
+
+            var randomList = shuffle(list);
+            commit(types.SET_PLAYLIST,randomList);
+            commit(types.SET_CURRENT_INDEX,0);
+            commit(types.SET_FULL_SCREEN, true);
+            commit(types.SET_PLAYING_STATE, true);
+        } 
     },
     strict: debug,
     plugins: debug ? [createLogger()] : []
 })
 
 
+function findIndex(list,song) {
+    return list.findIndex((item) => {
+        return item.id === song.id;
+    })
+}

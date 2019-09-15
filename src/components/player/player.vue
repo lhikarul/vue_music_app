@@ -85,7 +85,7 @@
 
         </transition>
         
-        <audio ref="audio" :src="currentSong.url" @canplay="ready" @error="error" @timeupdate="updateTime"></audio>
+        <audio ref="audio" :src="currentSong.url" @canplay="ready" @error="error" @timeupdate="updateTime" @ended="end"></audio>
 
     </div>
 </template>
@@ -259,6 +259,18 @@ export default {
         error () {
             this.songReady = true;
         },
+        end () {
+            if (this.mode === playMode.loop) {
+                this.loop();
+            }else {
+                this.next();
+            }
+            
+        },
+        loop () {
+            this.$refs.audio.currentTime = 0;
+            this.$refs.audio.play();
+        },
         updateTime(e) {
             this.currentTime = e.target.currentTime;
         },
@@ -285,6 +297,7 @@ export default {
         },
         changeMode () {
             const mode = (this.mode + 1) % 3; 
+
             this.setPlayMode(mode);
 
             var list = null;
@@ -303,6 +316,7 @@ export default {
                 return item.id === this.currentSong.id;
             })
             this.setCurrentIndex(index);
+
         },
         ...mapMutations({
             setFullScreen: 'SET_FULL_SCREEN',
