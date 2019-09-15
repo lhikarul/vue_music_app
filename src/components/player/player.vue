@@ -100,6 +100,7 @@ import animations from 'create-keyframe-animation';
 
 import {shuffle} from 'common/js/util';
 import {playMode} from 'common/js/config';
+import Lyric from 'lyric-parser';
 
 export default {
     name: 'Player',
@@ -107,7 +108,8 @@ export default {
         return {
             songReady: false,
             currentTime: 0,
-            radius: 32
+            radius: 32,
+            currentLyric: null
         }
     },
     components: {
@@ -318,6 +320,12 @@ export default {
             this.setCurrentIndex(index);
 
         },
+        getLyric () {
+            this.currentSong.getLyric().then(lyric => {
+                this.currentLyric = new Lyric(lyric);
+                console.log(this.currentLyric)
+            })
+        },
         ...mapMutations({
             setFullScreen: 'SET_FULL_SCREEN',
             setPlayingState: 'SET_PLAYING_STATE',
@@ -331,7 +339,7 @@ export default {
             if (newSong.id === oldSong.id) return;
             this.$nextTick(() => {
                 this.$refs.audio.play();
-                this.currentSong.getLyric();
+                this.getLyric();
             })
         },
         playing (newPlaying) {
