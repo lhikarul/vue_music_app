@@ -65,7 +65,6 @@ export default {
                 const barWidth = this.$refs.progressBar.clientWidth - progressBtnWidth;
                 const offsetWidth = newPercent * barWidth;
                 this.offset(offsetWidth);
-            
             }
         }
     },
