@@ -31,7 +31,7 @@
                     <div class="progress-wrapper">
                         <span class="time time-l">{{format(currentTime)}}</span>
                         <div class="progress-bar-wrapper">
-                            
+                            <progress-bar :percent="percent"></progress-bar>
                         </div>
                         <span class="time time-r">{{format(currentSong.duration)}}</span>
                     </div>
@@ -92,6 +92,8 @@
 <script>
 import {mapGetters, mapMutations} from 'vuex';
 
+import ProgressBar from 'base/progress-bar/progress-bar';
+
 import animations from 'create-keyframe-animation';
 
 export default {
@@ -101,6 +103,9 @@ export default {
             songReady: false,
             currentTime: 0
         }
+    },
+    components: {
+        ProgressBar
     },
     computed: {
         cdCls() {
@@ -114,6 +119,9 @@ export default {
         },
         disableCls () {
             return this.songReady ? '' : 'disabled';
+        },
+        percent () {
+            return this.currentTime / this.currentSong.duration;
         },
         ...mapGetters([
             'fullScreen',
@@ -243,7 +251,6 @@ export default {
             this.currentTime = e.target.currentTime;
         },
         pad (num,n = 2) {
-            console.log('currenttime ',this.currentTime)
             var len = num.toString().length;
             while (len < n) {
                 num = '0' + num;
