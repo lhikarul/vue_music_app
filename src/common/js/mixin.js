@@ -21,5 +21,5 @@ export const playlistMixin = {
     },
     activated() {
         this.handlePlaylist(this.playlist);
-    },
+    }
 }
