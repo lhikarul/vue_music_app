@@ -42,6 +42,8 @@ import Loading from 'base/loading/loading';
 
 import {mapActions} from 'vuex';
 
+import {playlistMixin} from 'common/js/mixin';
+
 const RESERVED_HEIGHT = 40;
 
 export default {
@@ -65,6 +67,7 @@ export default {
             default: ''
         }
     },
+    mixins: [playlistMixin],
     data () {
         return {
             scrollY: 0
@@ -87,6 +90,11 @@ export default {
             this.randomPlay({
                 list: this.songs
             })
+        },
+        handlePlaylist (playlist) {
+            const bottom = playlist.length > 0 ? '60px' : '';
+            this.$refs.list.$el.style.bottom = bottom;
+            this.$refs.list.refresh();
         },
         ...mapActions([
             'selectPlay',

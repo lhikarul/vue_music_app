@@ -90,6 +90,9 @@ export default {
             this.scrollTo(anchorIndex);
 
         },
+        refresh () {
+            this.$refs.listView.refresh();
+        },
         scroll (pos) {
             this.scrollY = pos.y
         },

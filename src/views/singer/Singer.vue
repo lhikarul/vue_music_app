@@ -1,7 +1,7 @@
 <template>
-    <div class="singer">
+    <div class="singer" ref="singer">
         
-        <list-view :data="singers" @select="selectSinger"></list-view>
+        <list-view :data="singers" @select="selectSinger" ref="list"></list-view>
 
         <transition name="slide">
             <router-view></router-view>
@@ -15,6 +15,7 @@ import {requestSingerList} from 'api/singer';
 import {ERR_OK} from 'api/config';
 
 import Singer from 'common/js/singer';
+import {playlistMixin} from 'common/js/mixin';
 
 import ListView from 'base/listview/listView';
 
@@ -28,6 +29,9 @@ export default {
     components: {
         ListView
     },
+    mixins: [
+        playlistMixin
+    ],
     data () {
         return {
             singers: []
@@ -106,6 +110,11 @@ export default {
 
             // 將 stroe 的 singer 狀態設為傳入的歌手
             this.setSinger(singer);
+        },
+        handlePlaylist(playlist) {
+            const bottom = playlist.length > 0 ? '60px' : '';
+            this.$refs.singer.style.bottom = bottom;
+            this.$refs.list.refresh();
         },
         ...mapMutations({
             setSinger: 'SET_SINGER'
