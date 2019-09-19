@@ -43,6 +43,9 @@ export default new Vuex.Store({
         },
         [types.SET_CURRENT_INDEX](state,index) {
             state.currentIndex = index
+        },
+        [types.SET_DISC](state,disc) {
+            state.disc = disc;
         }
     },
     getters: {
@@ -55,7 +58,8 @@ export default new Vuex.Store({
         currentIndex: state => state.currentIndex,
         currentSong: (state) => {
             return state.playlist[state.currentIndex] || {}
-        }
+        },
+        disc: state => state.disc
     },
     actions: {
         selectPlay ({commit,state},{list,index}) {

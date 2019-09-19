@@ -1,6 +1,7 @@
 <template>
     <div class="recommend" ref="recommend">
         <scroll ref="scroll" class="recommend-content" :data="songList">
+
             <div>
                 <div class="slider-wrapper" v-if="recommendsList.length">
                     <slider>
@@ -14,7 +15,7 @@
                 <div class="recommend-list">
                     <h1 class="recommend-list-title">熱門歌單推薦</h1>
                     <ul>
-                        <li class="recommend-list-item" v-for="item in songList" :key="item.listennum" >
+                        <li @click="selectItem(item)" class="recommend-list-item" v-for="item in songList" :key="item.listennum" >
                             <div class="item-image">
                                 <img width="60" height="60" v-lazy="item.imgurl">
                             </div>
@@ -26,10 +27,17 @@
                     </ul>
                 </div>
             </div>
+
             <div class="loading-container" v-show="!songList.length">
                 <loading></loading>
             </div>
+
         </scroll>
+
+        <transition name="slide">
+            <router-view></router-view>
+        </transition>
+
     </div>
 </template>
 
@@ -42,6 +50,7 @@ import Scroll from 'base/scroll/scroll';
 import Loading from 'base/loading/loading';
 
 import {playlistMixin} from 'common/js/mixin';
+import {mapMutations} from 'vuex';
 
 export default {
     name: 'Recommend',
@@ -75,6 +84,12 @@ export default {
 
             })
         },
+        selectItem (item) {
+            this.$router.push({
+                path: `/recommend/${item.dissid}`
+            })
+            this.setDisc(item);
+        },
         handlePlaylist (playlist) {
             const bottom = playlist.length > 0 ? '60px' : '';
             this.$refs.recommend.style.bottom = bottom;
@@ -87,7 +102,10 @@ export default {
                 this.$refs.scroll.refresh();
                 this.checkLoaded = true;
             }
-        }
+        },
+        ...mapMutations({
+            setDisc: 'SET_DISC'
+        })
     },
     created () {
         this.requestRecommendList();
@@ -164,4 +182,13 @@ export default {
             transform: translate(0,-50%);
         }
     }
+
+    .slide-enter-active, .slide-leave-active {
+        transition: all .3s;
+    }
+
+    .slide-enter, .slide-leave-to {
+        transform: translate3d(100%, 0 ,0);
+    }
+
 </style>
