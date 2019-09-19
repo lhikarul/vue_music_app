@@ -20,7 +20,8 @@ export default new Vuex.Store({
         playlist: [],
         sequenceList: [],
         mode: playMode.sequence,
-        currentIndex: -1
+        currentIndex: -1,
+        disc: {}
     },
     mutations: { 
         [types.SET_SINGER](state,singer) {

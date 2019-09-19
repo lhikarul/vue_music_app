@@ -1,7 +1,7 @@
 <template>
-    <transition name="slide">
+    <div>
         <music-list :title="title" :bg-image="bgImage"></music-list>
-    </transition>
+    </div>
 </template>
 
 <script>
@@ -15,7 +15,7 @@ export default {
     },
     computed: {
         title () {
-            return this.dissname;
+            return this.disc.dissname;
         },
         bgImage () {
             return this.disc.imgurl;
