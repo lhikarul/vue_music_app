@@ -1,20 +1,23 @@
 <template>
-    <div class="rank">
-        <div class="toplist">
+    <div class="rank" :data="topList" ref="rank">
+        <scroll class="toplist" ref="toplist">
             <ul>
-                <li class="item">
+                <li class="item" v-for="(item,index) in topList" :key="index">
                     <div class="icon">
-                        <img width="100" height="100" />
+                        <img width="100" height="100" v-lazy="item.picUrl" />
                     </div>
                     <ul class="songlist">
-                        <li class="song">
-                            <span></span>
-                            <span></span>
+                        <li class="song" v-for="(song,index) in item.songList" :key="index">
+                            <span>{{index + 1}}</span>
+                            <span>{{song.songname}}-{{song.singgername}}</span>
                         </li>
                     </ul>
                 </li>
             </ul>
-        </div>
+            <div class="loading-container" v-show="!topList.length">
+                <loading></loading>
+            </div>
+        </scroll>
         <router-view></router-view>
     </div>
 </template>
@@ -22,16 +25,34 @@
 <script>
 import {getRankList} from 'api/rank';
 import {ERR_OK} from 'api/config';
+import Scroll from 'base/scroll/scroll';
+import Loading from 'base/loading/loading';
+import {playlistMixin} from 'common/js/mixin'; 
 
 export default {
     name: "Rank",
+    mixins: [playlistMixin],
+    components: {
+        Scroll,
+        Loading
+    },
+    data () {
+        return {
+            topList: []
+        }
+    },
     methods: {
         getTopList () {
             getRankList().then((res) => {
                 if (res.code === ERR_OK) {
-                    console.log(res.data.topList)
+                    this.topList = res.data.topList;
                 }
             })
+        },
+        handlePlaylist (playlist) {
+            const bottom = playlist.length ? '60px' : '';
+            this.$refs.rank.style.bottom = bottom;
+            this.$refs.toplist.refresh();
         }
     },
     created () {
