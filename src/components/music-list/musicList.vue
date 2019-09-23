@@ -22,7 +22,7 @@
         <scroll :data="songs" class="list" ref="list" :probeType="probeType" :listenScroll="listenScroll" @scroll="scroll">
 
             <div class="song-list-wrapper">
-                <song-list :songs="songs" @select="selectItem"></song-list>
+                <song-list :rank="rank" :songs="songs" @select="selectItem"></song-list>
             </div>
 
             <div class="loading-container" v-show="!songs.length">
@@ -65,6 +65,10 @@ export default {
         title: {
             type: String,
             default: ''
+        },
+        rank: {
+            type: Boolean,
+            default: false
         }
     },
     mixins: [playlistMixin],
