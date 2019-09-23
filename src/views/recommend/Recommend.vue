@@ -72,7 +72,6 @@ export default {
                 if (res.code === ERR_OK) {
                     this.recommendsList = res.data.slider;
                 }
-
             })
         },
         requestSongsList () {
