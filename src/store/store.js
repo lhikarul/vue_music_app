@@ -21,7 +21,8 @@ export default new Vuex.Store({
         sequenceList: [],
         mode: playMode.sequence,
         currentIndex: -1,
-        disc: {}
+        disc: {},
+        topList: ''
     },
     mutations: { 
         [types.SET_SINGER](state,singer) {
@@ -47,6 +48,9 @@ export default new Vuex.Store({
         },
         [types.SET_DISC](state,disc) {
             state.disc = disc;
+        },
+        [types.SET_TOP_LIST](state,topList) {
+            state.topList = topList;
         }
     },
     getters: {
@@ -60,7 +64,8 @@ export default new Vuex.Store({
         currentSong: (state) => {
             return state.playlist[state.currentIndex] || {}
         },
-        disc: state => state.disc
+        disc: state => state.disc,
+        topList: state => state.topList
     },
     actions: {
         selectPlay ({commit,state},{list,index}) {
