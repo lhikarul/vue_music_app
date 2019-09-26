@@ -95,8 +95,8 @@ export default new Vuex.Store({
             commit(types.SET_PLAYING_STATE, true);
         },
         insertSong ({commit,state}, song) {
-            var playlist = state.playlist;
-            var sequenceList = state.sequenceList;
+            var playlist = state.playlist.slice();
+            var sequenceList = state.sequenceList.slice();
             var currentIndex = state.currentIndex;
 
             // 紀錄當前歌曲
@@ -140,8 +140,7 @@ export default new Vuex.Store({
             commit(types.SET_SEQUENCE_LIST,sequenceList)
             commit(types.SET_CURRENT_INDEX, currentIndex)
             commit(types.SET_FULL_SCREEN,true)
-            commit(types.SET_PLAYING_STATE,true)
-            
+            commit(types.SET_PLAYING_STATE,true)            
         }
     },
     strict: debug,
