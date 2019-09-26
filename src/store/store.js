@@ -122,6 +122,26 @@ export default new Vuex.Store({
                 }
             }
 
+            var currentSIndex = findIndex(sequenceList, currentSong) + 1;
+
+            var fsIndex = findIndex(sequenceList,song);
+
+            sequenceList.splice(currentSIndex,0,song);
+
+            if (fsIndex > -1) {
+                if (currentSIndex > fsIndex) {
+                    sequenceList.splice(fsIndex, 1)
+                }else {
+                    sequenceList.splice(fsIndex + 1, 1)
+                }
+            }
+
+            commit(types.SET_PLAYLIST,playlist)
+            commit(types.SET_SEQUENCE_LIST,sequenceList)
+            commit(types.SET_CURRENT_INDEX, currentIndex)
+            commit(types.SET_FULL_SCREEN,true)
+            commit(types.SET_PLAYING_STATE,true)
+            
         }
     },
     strict: debug,
