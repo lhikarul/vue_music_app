@@ -93,7 +93,36 @@ export default new Vuex.Store({
             commit(types.SET_CURRENT_INDEX,0);
             commit(types.SET_FULL_SCREEN, true);
             commit(types.SET_PLAYING_STATE, true);
-        } 
+        },
+        insertSong ({commit,state}, song) {
+            var playlist = state.playlist;
+            var sequenceList = state.sequenceList;
+            var currentIndex = state.currentIndex;
+
+            // 紀錄當前歌曲
+            var currentSong = playlist[currentIndex];
+
+            // 查找當前列表是否有待插入的歌曲
+            var fpIndex = findIndex(playlist, song);
+            
+            // 因為是插入歌曲，所以索引 + 1
+            currentIndex++;
+
+            // 插入這首歌到當前索引位置
+            playlist.splice(currentIndex,0,song);
+
+            // 如果已經包含這首歌
+            if (fpIndex > -1) {
+                // 如果當前插入的序號 > 列表中的序號
+                if (currentIndex > fpIndex) {
+                    playlist.splice(fpIndex, 1);
+                    currentIndex--;
+                }else {
+                    playlist.splice(fpIndex + 1,1)
+                }
+            }
+
+        }
     },
     strict: debug,
     plugins: debug ? [createLogger()] : []
