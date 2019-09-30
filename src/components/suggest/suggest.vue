@@ -1,5 +1,5 @@
 <template>
-    <scroll class="suggest" :data="result" :pullup="pullup" @scrollToEnd="searchMore" ref="suggest">
+    <scroll class="suggest" :data="result" :pullup="pullup" :beforeScroll="beforeScroll" @beforeScroll="listScroll" @scrollToEnd="searchMore" ref="suggest">
         <ul class="suggest-list">
             <li @click="selectItem(item)" class="suggest-item" v-for="(item,index) in result" :key="index">
                 <div class="icon">
@@ -11,6 +11,9 @@
             </li>
             <loading v-show="hasMore" title=""></loading>
         </ul>
+        <div class="no-result-wrapper">
+            <no-result v-show="!hasMore && !result.length" title="暫無搜尋結果"></no-result>
+        </div>
     </scroll>
 </template>
 
@@ -24,6 +27,8 @@ import Loading from 'base/loading/loading';
 import Singer from 'common/js/singer';
 
 import {mapMutations,mapActions} from 'vuex';
+
+import NoResult from 'base/no-result/no-result';
 
 const TYPE_SINGER = 'singer';
 const perpage = 20;
@@ -42,14 +47,16 @@ export default {
     },
     components: {
         Scroll,
-        Loading
+        Loading,
+        NoResult
     },
     data () {
         return {
             page: 1,
             result: [],
             pullup: true,
-            hasMore: true
+            hasMore: true,
+            beforeScroll: true
         }
     },
     methods: {
@@ -138,6 +145,9 @@ export default {
                 this.insertSong(item)
             }
 
+        },
+        listScroll () {
+            this.$emit('listScroll');
         },
         ...mapMutations({
             setSinger: 'SET_SINGER'
