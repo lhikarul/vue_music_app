@@ -7,6 +7,7 @@ import createLogger from 'vuex/dist/logger';
 
 import {playMode} from 'common/js/config';
 import {shuffle} from 'common/js/util';
+import {saveSearch} from 'common/js/cache';
 
 Vue.use(Vuex);
 
@@ -22,7 +23,8 @@ export default new Vuex.Store({
         mode: playMode.sequence,
         currentIndex: -1,
         disc: {},
-        topList: ''
+        topList: '',
+        searchHistory: []
     },
     mutations: { 
         [types.SET_SINGER](state,singer) {
@@ -51,6 +53,9 @@ export default new Vuex.Store({
         },
         [types.SET_TOP_LIST](state,topList) {
             state.topList = topList;
+        },
+        [types.SET_SEARCH_HISTORY](state,history) {
+            state.searchHistory = history;
         }
     },
     getters: {
@@ -65,7 +70,8 @@ export default new Vuex.Store({
             return state.playlist[state.currentIndex] || {}
         },
         disc: state => state.disc,
-        topList: state => state.topList
+        topList: state => state.topList,
+        searchHistory: state => state.searchHistory
     },
     actions: {
         selectPlay ({commit,state},{list,index}) {
@@ -141,6 +147,9 @@ export default new Vuex.Store({
             commit(types.SET_CURRENT_INDEX, currentIndex)
             commit(types.SET_FULL_SCREEN,true)
             commit(types.SET_PLAYING_STATE,true)            
+        },
+        saveSearchHistory ({commit}, query) {
+            commit(types.SET_SEARCH_HISTORY, saveSearch(query));
         }
     },
     strict: debug,
