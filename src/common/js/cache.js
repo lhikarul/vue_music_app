@@ -32,3 +32,7 @@ export function saveSearch(query) {
 
     return searches;
 }
+
+export function loadSearch () {
+    return storage.get(SEARCH_KEY,[]);
+}

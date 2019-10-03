@@ -9,6 +9,8 @@ import {playMode} from 'common/js/config';
 import {shuffle} from 'common/js/util';
 import {saveSearch} from 'common/js/cache';
 
+import {loadSearch} from 'common/js/cache';
+
 Vue.use(Vuex);
 
 const debug = process.env.NODE_ENV !== ' production';
@@ -24,7 +26,7 @@ export default new Vuex.Store({
         currentIndex: -1,
         disc: {},
         topList: '',
-        searchHistory: []
+        searchHistory: loadSearch()
     },
     mutations: { 
         [types.SET_SINGER](state,singer) {
