@@ -7,9 +7,8 @@ import createLogger from 'vuex/dist/logger';
 
 import {playMode} from 'common/js/config';
 import {shuffle} from 'common/js/util';
-import {saveSearch} from 'common/js/cache';
+import {saveSearch,loadSearch,deleteSearch,clearSearch} from 'common/js/cache';
 
-import {loadSearch} from 'common/js/cache';
 
 Vue.use(Vuex);
 
@@ -152,6 +151,12 @@ export default new Vuex.Store({
         },
         saveSearchHistory ({commit}, query) {
             commit(types.SET_SEARCH_HISTORY, saveSearch(query));
+        },
+        deleteSearchHistory ({commit}, query) {
+            commit(types.SET_SEARCH_HISTORY, deleteSearch(query));
+        },
+        clearSearchHistory ({commit}) {
+            commit(types.SET_SEARCH_HISTORY, clearSearch())
         }
     },
     strict: debug,
