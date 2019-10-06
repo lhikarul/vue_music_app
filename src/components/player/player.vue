@@ -100,6 +100,8 @@
             </div>
 
         </transition>
+
+        <playlist></playlist>
         
         <audio ref="audio" :src="currentSong.url" @canplay="ready" @error="error" @timeupdate="updateTime" @ended="end"></audio>
 
@@ -120,6 +122,8 @@ import Lyric from 'lyric-parser';
 
 import Scroll from 'base/scroll/scroll';
 
+import Playlist from 'components/playlist/playlist';
+
 export default {
     name: 'Player',
     data () {
@@ -136,7 +140,8 @@ export default {
     components: {
         ProgressBar,
         ProgressCircle,
-        Scroll
+        Scroll,
+        Playlist
     },
     computed: {
         cdCls() {
