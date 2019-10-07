@@ -157,6 +157,34 @@ export default new Vuex.Store({
         },
         clearSearchHistory ({commit}) {
             commit(types.SET_SEARCH_HISTORY, clearSearch())
+        },
+        deleteSong({commit,state}, song) {
+
+            var playlist = state.playlist.slice();
+            var sequenceList = state.sequenceList.slice();
+            var currentIndex = state.currentIndex;
+
+            var pIndex = findIndex(playlist,song);
+            playlist.splice(pIndex,1);
+
+            var sIndex = findIndex(sequenceList,song);
+            sequenceList.splice(sIndex,1);
+
+            if (currentIndex > pIndex || currentIndex === playlist.length) {
+                currentIndex--;
+            }
+
+            commit(types.SET_PLAYLIST, playlist);
+            commit(types.SET_SEQUENCE_LIST, sequenceList);
+            commit(types.SET_CURRENT_INDEX, currentIndex);
+
+            if (!playlist.length) {
+                commit(types.SET_PLAYING_STATE, false);
+            }else {
+                commit(types.SET_PLAYING_STATE, true);
+            }
+            
+
         }
     },
     strict: debug,
