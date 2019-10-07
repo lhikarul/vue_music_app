@@ -93,7 +93,7 @@
                         <i @click.stop="togglePlaying" :class="miniIcon" class="icon-mini"></i>
                     </div>
 
-                    <div class="control">
+                    <div class="control" @click="showPlayList">
                         <i class="icon-playlist"></i>
                     </div>
                 </div>
@@ -101,7 +101,7 @@
 
         </transition>
 
-        <playlist></playlist>
+        <playlist ref="playlist"></playlist>
         
         <audio ref="audio" :src="currentSong.url" @canplay="ready" @error="error" @timeupdate="updateTime" @ended="end"></audio>
 
@@ -453,6 +453,9 @@ export default {
             }
 
             this.playingLyric = txt;
+        },
+        showPlayList () {
+            this.$refs.playlist.show();
         },
         ...mapMutations({
             setFullScreen: 'SET_FULL_SCREEN',

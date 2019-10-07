@@ -1,7 +1,7 @@
 <template>
     <transition name="list-fade">
-        <div class="playlist">
-            <div class="list-wrapper">
+        <div class="playlist" v-show="showFlag" @click="hide">
+            <div class="list-wrapper" @click.stop>
                 <div class="list-header">
                     <h1 class="title">
                         <i class="icon"></i>
@@ -31,7 +31,7 @@
                     </div>
                 </div>
 
-                <div class="list-close">
+                <div class="list-close" @click="hide">
                     <span>關閉</span>
                 </div>
 
@@ -42,7 +42,20 @@
 
 <script>
 export default {
-    name: 'playlist'
+    name: 'playlist',
+    data () {
+        return {
+            showFlag: false
+        }
+    },
+    methods: {
+        show () {
+            this.showFlag = true;
+        },
+        hide () {
+            this.showFlag = false;
+        }
+    }
 }
 </script>
 
