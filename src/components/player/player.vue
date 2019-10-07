@@ -93,7 +93,7 @@
                         <i @click.stop="togglePlaying" :class="miniIcon" class="icon-mini"></i>
                     </div>
 
-                    <div class="control" @click="showPlayList">
+                    <div class="control" @click.stop="showPlayList">
                         <i class="icon-playlist"></i>
                     </div>
                 </div>
