@@ -91,6 +91,10 @@ export default {
         },
         deleteOne (item) {
             this.deleteSong(item);
+            if (!this.playlist.length) {
+                this.hide();
+            }
+
         },
         ...mapMutations({
             'setCurrentIndex': 'SET_CURRENT_INDEX',
