@@ -178,13 +178,16 @@ export default new Vuex.Store({
             commit(types.SET_SEQUENCE_LIST, sequenceList);
             commit(types.SET_CURRENT_INDEX, currentIndex);
 
-            if (!playlist.length) {
-                commit(types.SET_PLAYING_STATE, false);
-            }else {
-                commit(types.SET_PLAYING_STATE, true);
-            }
-            
+            const playingState = playlist.length > 0;
 
+            commit(types.SET_PLAYING_STATE, playingState);
+
+        },
+        deleteSongList({commit}) {
+            commit(types.SET_PLAYLIST, []);
+            commit(types.SET_SEQUENCE_LIST, []);
+            commit(types.SET_CURRENT_INDEX, -1);
+            commit(types.SET_PLAYING_STATE, false);
         }
     },
     strict: debug,
