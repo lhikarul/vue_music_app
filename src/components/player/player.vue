@@ -116,16 +116,16 @@ import ProgressCircle from 'base/progress-circle/progress-circle';
 
 import animations from 'create-keyframe-animation';
 
-import {shuffle} from 'common/js/util';
-import {playMode} from 'common/js/config';
 import Lyric from 'lyric-parser';
 
 import Scroll from 'base/scroll/scroll';
-
+import {playMode} from 'common/js/config';
 import Playlist from 'components/playlist/playlist';
+import {playerMixin} from 'common/js/mixin';
 
 export default {
     name: 'Player',
+    mixins: [playerMixin],
     data () {
         return {
             songReady: false,
@@ -159,17 +159,10 @@ export default {
         percent () {
             return this.currentTime / this.currentSong.duration;
         },
-        iconMode () {
-            return this.mode === playMode.sequence ? 'icon-sequence' : this.mode === playMode.loop ? 'icon-loop' : 'icon-random';
-        },
         ...mapGetters([
             'fullScreen',
-            'playlist',
-            'currentSong',
             'playing',
-            'currentIndex',
-            'mode',
-            'sequenceList'
+            'currentIndex'
         ])
     },
     methods: {
@@ -407,29 +400,6 @@ export default {
                 this.currentLyric.seek(currentTime * 1000);
             }
         },
-        changeMode () {
-            const mode = (this.mode + 1) % 3; 
-
-            this.setPlayMode(mode);
-
-            var list = null;
-
-            if (mode === playMode.random) {
-                list = shuffle(this.sequenceList)
-            }else {
-                list = this.sequenceList;
-            }
-
-            this.resetCurrentIndex(list);
-            this.setPlaylist(list);
-        },
-        resetCurrentIndex (list) {
-            var index = list.findIndex((item) => {
-                return item.id === this.currentSong.id;
-            })
-            this.setCurrentIndex(index);
-
-        },
         getLyric () {
             this.currentSong.getLyric().then(lyric => {
                 this.currentLyric = new Lyric(lyric, this.handleLyric);
@@ -458,11 +428,7 @@ export default {
             this.$refs.playlist.show();
         },
         ...mapMutations({
-            setFullScreen: 'SET_FULL_SCREEN',
-            setPlayingState: 'SET_PLAYING_STATE',
-            setCurrentIndex: 'SET_CURRENT_INDEX',
-            setPlayMode: 'SET_PLAY_MODE',
-            setPlaylist: 'SET_PLAYLIST'
+            setFullScreen: 'SET_FULL_SCREEN'
         })
     },
     watch: {
