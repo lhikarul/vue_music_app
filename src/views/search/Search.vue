@@ -52,12 +52,12 @@ import Scroll from 'base/scroll/scroll';
 
 import Suggest from 'components/suggest/suggest';
 
-import {mapActions, mapGetters} from 'vuex';
-import {playlistMixin} from 'common/js/mixin';
+import {mapActions} from 'vuex';
+import {playlistMixin,searchMixin} from 'common/js/mixin';
 
 export default {
     name: 'Search',
-    mixins: [playlistMixin],
+    mixins: [playlistMixin,searchMixin],
     components: {
         SearchBox,
         Suggest,
@@ -79,18 +79,6 @@ export default {
                 }
             })
         },
-        addQuery(query) {
-            this.$refs.searchBox.setQuery(query);
-        },
-        onQueryChange (query) {
-            this.query = query;
-        },
-        blurInput () {
-            this.$refs.searchBox.blur();
-        },
-        saveSearch () {
-            this.saveSearchHistory(this.query);
-        },
         showConfirm () {
             this.$refs.confirm.show();
         },
@@ -105,18 +93,13 @@ export default {
             this.$refs.suggest.refresh();
         },
         ...mapActions([
-            'saveSearchHistory',
-            'deleteSearchHistory',
             'clearSearchHistory'
         ])
     },
     computed: {
         shortcut () {
             return this.hotKey.concat(this.searchHistory)
-        },
-        ...mapGetters([
-            'searchHistory'
-        ])
+        }
     },
     watch: {
         query (newQuery) {
