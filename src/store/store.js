@@ -7,8 +7,7 @@ import createLogger from 'vuex/dist/logger';
 
 import {playMode} from 'common/js/config';
 import {shuffle} from 'common/js/util';
-import {saveSearch,loadSearch,deleteSearch,clearSearch,savePlay,loadPlay} from 'common/js/cache';
-
+import {saveSearch,loadSearch,deleteSearch,clearSearch,savePlay,loadPlay,loadFavorite,saveFavorite,deleteFavorite} from 'common/js/cache';
 
 Vue.use(Vuex);
 
@@ -26,7 +25,8 @@ export default new Vuex.Store({
         disc: {},
         topList: '',
         searchHistory: loadSearch(),
-        playHistory: loadPlay()
+        playHistory: loadPlay(),
+        favoriteList: loadFavorite()
     },
     mutations: { 
         [types.SET_SINGER](state,singer) {
@@ -61,6 +61,9 @@ export default new Vuex.Store({
         },
         [types.SET_PLAY_HISTORY](state,history) {
             state.playHistory = history;
+        },
+        [types.SET_FAVORITE_LIST](state,list) {
+            state.favoriteList = list;
         }
     },
     getters: {
@@ -77,7 +80,8 @@ export default new Vuex.Store({
         disc: state => state.disc,
         topList: state => state.topList,
         searchHistory: state => state.searchHistory,
-        playHistory: state => state.playHistory
+        playHistory: state => state.playHistory,
+        favoriteList: state => state.favoriteList
     },
     actions: {
         selectPlay ({commit,state},{list,index}) {
@@ -196,6 +200,12 @@ export default new Vuex.Store({
         },
         savePlayHistory ({commit},song) {
             commit(types.SET_PLAY_HISTORY, savePlay(song));
+        },
+        saveFavoriteList({commit}, song) {
+            commit(types.SET_FAVORITE_LIST, saveFavorite(song));
+        },
+        deleteFavoriteList({commit}, song) {
+            commit(types.SET_FAVORITE_LIST, deleteFavorite(song));
         }
     },
     strict: debug,
