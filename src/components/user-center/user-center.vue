@@ -1,13 +1,13 @@
 <template>
     <transition name="slide">
         <div class="user-center">
-            <div class="back">
+            <div class="back" @click="back">
                 <i class="icon-back"></i>
             </div>
             <div class="switches-wrapper">
                 <switches :switches="switches" :currentIndex="currentIndex" @switch="switchItem"></switches>
             </div>
-            <div ref="playBtn" class="play-btn">
+            <div ref="playBtn" class="play-btn" @click="random">
                 <i class="icon-play"></i>
                 <span class="text">隨機撥放全部</span>
             </div>
@@ -33,7 +33,9 @@
 import Switches from 'base/switches/switches';
 import Scroll from 'base/scroll/scroll';
 import SongList from 'base/song-list/songList';
+
 import Song from 'common/js/song';
+import {playlistMixin} from 'common/js/mixin';
 
 import {mapGetters,mapActions} from 'vuex';
 
@@ -44,6 +46,7 @@ export default {
         Scroll,
         SongList
     },
+    mixins: [playlistMixin],
     data () {
         return {
             currentIndex: 0,
@@ -54,6 +57,25 @@ export default {
         }
     },
     methods: {
+        back () {
+            this.$router.back();
+        },
+        handlePlaylist(playlist) {
+            const bottom = playlist.length > 0 ? '60px' : '';
+            this.$refs.listWrapper.bottom = bottom;
+
+        },
+        random () {
+            var list = this.currentIndex === 0 ? this.favoriteList : this.playHistory;
+
+            list = list.map((song) => {
+                return new Song(song);
+            })
+
+            this.randomPlay({
+                list
+            })
+        },
         switchItem(index) {
             this.currentIndex = index;
         },
@@ -61,7 +83,8 @@ export default {
             this.insertSong(new Song(song))
         },
         ...mapActions([
-            'insertSong'
+            'insertSong',
+            'randomPlay'
         ])
     },
     computed: {
