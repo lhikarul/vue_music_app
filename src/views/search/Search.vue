@@ -6,7 +6,7 @@
         </div>
 
         <div ref="shortcutWrapper" class="shortcut-wrapper" v-show="!query">
-            <scroll class="shortcut" :data="shortcut" ref="shortcut">
+            <scroll :refreshDelay="refreshDelay" class="shortcut" :data="shortcut" ref="shortcut">
                 <div>
                     <div class="hot-key">
                         <h1 class="title">熱門搜索</h1>

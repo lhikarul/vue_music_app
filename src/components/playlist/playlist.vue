@@ -10,7 +10,7 @@
                     </h1>
                 </div>
                 <scroll ref="listContent" :data="sequenceList" class="list-content">
-                    <transition-group name="list" tag="ul">
+                    <transition-group name="list" tag="ul" :refreshDelay="refreshDelay">
                         <li :key="item.id" ref="listItem" class="item" v-for="(item,index) in sequenceList" @click="selectItem(item,index)">
                             <i class="current" :class="getCurrentIcon(item)"></i>
                             <span class="text">{{item.name}}</span>
@@ -61,7 +61,8 @@ export default {
     },
     data () {
         return {
-            showFlag: false
+            showFlag: false,
+            refreshDelay: 100
         }
     },
     methods: {
