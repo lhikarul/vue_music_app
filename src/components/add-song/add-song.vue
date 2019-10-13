@@ -10,7 +10,16 @@
         <div class="search-box-wrapper">
             <search-box placeholder="搜索歌曲" @query="onQueryChange" ></search-box>
         </div>
-        <div class="shortcut" v-show="!query"></div>
+        <div class="shortcut" v-show="!query">
+            <switches :switches="switches" :currentIndex="currentIndex" @switch="switchItem"></switches>
+            <div class="list-wrapper">
+                <scroll class="list-scroll" v-if="currentIndex === 0" :data="playHistory">
+                    <div class="list-inner">
+                        <song-list :songs="playHistory" @select="selectSong"></song-list>
+                    </div>
+                </scroll>
+            </div>
+        </div>
         <div class="search-result" v-show="query">
             <suggest :query="query" :showSinger="showSinger" @select="selectSuggest" @listScroll="blurInput"></suggest>
         </div>
@@ -20,21 +29,36 @@
 
 <script>
 import SearchBox from 'base/search-box/search-box';
+import Switches from 'base/switches/switches';
+import Scroll from 'base/scroll/scroll';
+import SongList from 'base/song-list/songList';
+
 import Suggest from 'components/suggest/suggest';
+
 import {searchMixin} from 'common/js/mixin';
+import Song from 'common/js/song';
+
+import {mapGetters, mapActions} from 'vuex';
 
 export default {
     name: 'addSong',
     components: {
         SearchBox,
-        Suggest
+        Suggest,
+        Switches,
+        Scroll,
+        SongList
     },
     mixins: [searchMixin],
     data () {
         return {
             showFlag: false,
-            query: '',
-            showSinger: false
+            showSinger: false,
+            currentIndex: 0,
+            switches: [
+                {name: '最近撥放'},
+                {name: '搜索歷史'}
+            ]
         }
     },
     methods: {
@@ -44,9 +68,25 @@ export default {
         hide () {
             this.showFlag = false;
         },
+        selectSong (song,index) {
+            if (index !== 0) {
+                this.insertSong(new Song(song));
+            }
+        },
         selectSuggest () {
             this.saveSearch();
-        }
+        },
+        switchItem (index) {
+            this.currentIndex = index;
+        },
+        ...mapActions([
+            'insertSong'
+        ])
+    },
+    computed: {
+        ...mapGetters([
+            'playHistory'
+        ])
     }
 }
 </script>

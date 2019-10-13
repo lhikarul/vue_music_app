@@ -103,13 +103,14 @@
 
         <playlist ref="playlist"></playlist>
         
-        <audio ref="audio" :src="currentSong.url" @canplay="ready" @error="error" @timeupdate="updateTime" @ended="end"></audio>
-
+        <audio ref="audio" src="http://other.web.ra01.sycdn.kuwo.cn/b474f73f8b7d4a040dad7b832858c9b0/5da29797/resource/n3/320/74/27/4113470514.mp3" @canplay="ready" @error="error" @timeupdate="updateTime" @ended="end"></audio>
+        <!-- <audio ref="audio" :src="currentSong.url" @canplay="ready" @error="error" @timeupdate="updateTime" @ended="end"></audio> -->
+        <!-- http://other.web.ra01.sycdn.kuwo.cn/b474f73f8b7d4a040dad7b832858c9b0/5da29797/resource/n3/320/74/27/4113470514.mp3 -->
     </div>
 </template>
 
 <script>
-import {mapGetters, mapMutations} from 'vuex';
+import {mapGetters, mapMutations, mapActions} from 'vuex';
 
 import ProgressBar from 'base/progress-bar/progress-bar';
 import ProgressCircle from 'base/progress-circle/progress-circle';
@@ -289,7 +290,9 @@ export default {
             this.songReady = false;
         },
         ready () {
+            console.log('ready...')
             this.songReady = true;
+            this.savePlayHistory(this.currentSong);
         },
         error () {
             this.songReady = true;
@@ -429,7 +432,10 @@ export default {
         },
         ...mapMutations({
             setFullScreen: 'SET_FULL_SCREEN'
-        })
+        }),
+        ...mapActions([
+            'savePlayHistory'
+        ])
     },
     watch: {
         currentSong(newSong,oldSong) {
