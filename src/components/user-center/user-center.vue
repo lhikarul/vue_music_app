@@ -11,18 +11,38 @@
                 <i class="icon-play"></i>
                 <span class="text">隨機撥放全部</span>
             </div>
-            <div class="list-wrapper" ref="listWrapper"></div>
+            <div class="list-wrapper" ref="listWrapper">
+
+                <scroll ref="favoriteList" class="list-scroll" v-if="currentIndex === 0" :data="favoriteList">
+                    <div class="list-inner">
+                        <song-list :songs="favoriteList" @select="selectSong"></song-list>
+                    </div>
+                </scroll>
+                <scroll ref="playList" class="list-scroll" v-if="currentIndex === 1" :data="playHistory">
+                    <div class="list-inner">
+                        <song-list :songs="playHistory" @select="selectSong"></song-list>
+                    </div>
+                </scroll>
+
+            </div>
         </div>
     </transition>
 </template>
 
 <script>
 import Switches from 'base/switches/switches';
+import Scroll from 'base/scroll/scroll';
+import SongList from 'base/song-list/songList';
+import Song from 'common/js/song';
+
+import {mapGetters,mapActions} from 'vuex';
 
 export default {
     name: 'user-center',
     components: {
-        Switches
+        Switches,
+        Scroll,
+        SongList
     },
     data () {
         return {
@@ -36,7 +56,19 @@ export default {
     methods: {
         switchItem(index) {
             this.currentIndex = index;
-        }
+        },
+        selectSong (song) {
+            this.insertSong(new Song(song))
+        },
+        ...mapActions([
+            'insertSong'
+        ])
+    },
+    computed: {
+        ...mapGetters([
+            'favoriteList',
+            'playHistory'
+        ])
     }
 }
 </script>
