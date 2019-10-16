@@ -17,7 +17,8 @@ export function getRecommendList () {
 }
 
 export function getRecommendSongs () {
-    const url = '/api/getRecommendSongsList';
+
+    const url = process.env.VUE_APP_API_PATH + '/getRecommendSongsList';
 
     const data = Object.assign({}, commonParams, {
         platform: 'yqq',
@@ -40,7 +41,9 @@ export function getRecommendSongs () {
 
 export function getSongList (disstid) {
 
-    const url = '/api/recommendSong'
+    // const url = '/api/recommendSong'
+
+    const url = process.env.VUE_APP_API_PATH + '/recommendSong'
 
     const data = Object.assign({}, commonParams, {
         disstid,

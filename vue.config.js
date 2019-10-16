@@ -8,6 +8,7 @@ function resolve(dir) {
 
 module.exports = {
     lintOnSave: false,
+    publicPath: './',
     chainWebpack: (config) => {
         config.resolve.alias
             .set('@', resolve('src'))

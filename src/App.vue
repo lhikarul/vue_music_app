@@ -19,6 +19,8 @@ import HeaderComponent from 'components/header/Header';
 import Tab from 'components/tab/Tab';
 import Player from 'components/player/player';
 
+console.log(process.env.NODE_ENV)
+
 export default {
     name: 'app',
     components: {
@@ -30,6 +32,5 @@ export default {
 </script>
 
 <style lang="scss">
-
 
 </style>

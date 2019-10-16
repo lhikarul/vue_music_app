@@ -4,7 +4,8 @@ import {commonParams, options} from './config';
 import axios from 'axios';
 
 export function getLyric(mid) {
-    const url = '/api/lyric';
+    // const url = '/api/lyric';
+    const url = process.env.VUE_APP_API_PATH + '/lyric';
 
     const data = Object.assign({}, commonParams, {
         songmid: mid,
